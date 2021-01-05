@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ImportExportXml version="9.1.0.25851" SolutionPackageVersion="9.1" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SolutionManifest>
+    <UniqueName>AXIRPA</UniqueName>
+    <LocalizedNames>
+      <LocalizedName description="AXI RPA" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="Oplossing voor demonstreren van RPA mogelijkheden." languagecode="1033" />
+    </Descriptions>
+    <Version>1.0.0.22</Version>
+    <Managed>0</Managed>
+    <Publisher>
+      <UniqueName>AXI</UniqueName>
+      <LocalizedNames>
+        <LocalizedName description="AXI" languagecode="1033" />
+      </LocalizedNames>
+      <Descriptions />
+      <EMailAddress>info@axi.nl</EMailAddress>
+      <SupportingWebsiteUrl>https://www.axi.nl/</SupportingWebsiteUrl>
+      <CustomizationPrefix>axirpa</CustomizationPrefix>
+      <CustomizationOptionValuePrefix>10000</CustomizationOptionValuePrefix>
+      <Addresses>
+        <Address>
+          <AddressNumber>1</AddressNumber>
+          <AddressTypeCode>1</AddressTypeCode>
+          <City>Breda</City>
+          <County xsi:nil="true"></County>
+          <Country>Nederland</Country>
+          <Fax xsi:nil="true"></Fax>
+          <FreightTermsCode xsi:nil="true"></FreightTermsCode>
+          <ImportSequenceNumber xsi:nil="true"></ImportSequenceNumber>
+          <Latitude xsi:nil="true"></Latitude>
+          <Line1>Stadionstraat 27</Line1>
+          <Line2 xsi:nil="true"></Line2>
+          <Line3 xsi:nil="true"></Line3>
+          <Longitude xsi:nil="true"></Longitude>
+          <Name xsi:nil="true"></Name>
+          <PostalCode>4815NC</PostalCode>
+          <PostOfficeBox xsi:nil="true"></PostOfficeBox>
+          <PrimaryContactName xsi:nil="true"></PrimaryContactName>
+          <ShippingMethodCode>1</ShippingMethodCode>
+          <StateOrProvince>Noord-Brabant</StateOrProvince>
+          <Telephone1>0765725500</Telephone1>
+          <Telephone2 xsi:nil="true"></Telephone2>
+          <Telephone3 xsi:nil="true"></Telephone3>
+          <TimeZoneRuleVersionNumber xsi:nil="true"></TimeZoneRuleVersionNumber>
+          <UPSZone xsi:nil="true"></UPSZone>
+          <UTCOffset xsi:nil="true"></UTCOffset>
+          <UTCConversionTimeZoneCode xsi:nil="true"></UTCConversionTimeZoneCode>
+        </Address>
+        <Address>
+          <AddressNumber>2</AddressNumber>
+          <AddressTypeCode>1</AddressTypeCode>
+          <City xsi:nil="true"></City>
+          <County xsi:nil="true"></County>
+          <Country xsi:nil="true"></Country>
+          <Fax xsi:nil="true"></Fax>
+          <FreightTermsCode xsi:nil="true"></FreightTermsCode>
+          <ImportSequenceNumber xsi:nil="true"></ImportSequenceNumber>
+          <Latitude xsi:nil="true"></Latitude>
+          <Line1 xsi:nil="true"></Line1>
+          <Line2 xsi:nil="true"></Line2>
+          <Line3 xsi:nil="true"></Line3>
+          <Longitude xsi:nil="true"></Longitude>
+          <Name xsi:nil="true"></Name>
+          <PostalCode xsi:nil="true"></PostalCode>
+          <PostOfficeBox xsi:nil="true"></PostOfficeBox>
+          <PrimaryContactName xsi:nil="true"></PrimaryContactName>
+          <ShippingMethodCode>1</ShippingMethodCode>
+          <StateOrProvince xsi:nil="true"></StateOrProvince>
+          <Telephone1 xsi:nil="true"></Telephone1>
+          <Telephone2 xsi:nil="true"></Telephone2>
+          <Telephone3 xsi:nil="true"></Telephone3>
+          <TimeZoneRuleVersionNumber xsi:nil="true"></TimeZoneRuleVersionNumber>
+          <UPSZone xsi:nil="true"></UPSZone>
+          <UTCOffset xsi:nil="true"></UTCOffset>
+          <UTCConversionTimeZoneCode xsi:nil="true"></UTCConversionTimeZoneCode>
+        </Address>
+      </Addresses>
+    </Publisher>
+    <RootComponents>
+      <RootComponent type="1" schemaName="axirpa_flow" behavior="0" />
+      <RootComponent type="1" schemaName="axirpa_flow_parameter" behavior="0" />
+      <RootComponent type="1" schemaName="axirpa_user_flow_parameter" behavior="0" />
+      <RootComponent type="29" id="{182e7540-ffe4-41e1-bc2b-2bdb63c040ff}" behavior="0" />
+      <RootComponent type="29" id="{69ec29b2-ee4c-eb11-a813-000d3a1cc931}" behavior="0" />
+      <RootComponent type="29" id="{6af867e6-9469-4cb9-93be-42e171198f0c}" behavior="0" />
+      <RootComponent type="29" id="{8ea1c1c8-fc4c-eb11-a813-000d3a1cc931}" behavior="0" />
+      <RootComponent type="29" id="{d8b19532-664f-eb11-a813-000d3a1cc931}" behavior="0" />
+    </RootComponents>
+    <MissingDependencies>
+      <MissingDependency>
+        <Required key="0" type="1" schemaName="environmentvariabledefinition" displayName="Environment Variable Definition" solution="EnvironmentVariables (1.0.2.50)" />
+        <Dependent key="1" type="29" displayName="HTTP - Start" id="{69ec29b2-ee4c-eb11-a813-000d3a1cc931}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="2" type="1" schemaName="environmentvariablevalue" displayName="Environment Variable Value" solution="EnvironmentVariables (1.0.2.50)" />
+        <Dependent key="1" type="29" displayName="HTTP - Start" id="{69ec29b2-ee4c-eb11-a813-000d3a1cc931}" />
+      </MissingDependency>
+    </MissingDependencies>
+  </SolutionManifest>
+</ImportExportXml>
