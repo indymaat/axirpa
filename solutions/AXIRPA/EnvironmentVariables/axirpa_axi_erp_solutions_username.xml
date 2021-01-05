@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Definition IntroducedVersion="1.0.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SchemaName>axirpa_axi_erp_solutions_username</SchemaName>
+  <IsRequired>0</IsRequired>
+  <Type>100000000</Type>
+  <DefaultValue>AXI_RPA</DefaultValue>
+  <DisplayName>
+    <LocalizedNames>
+      <LocalizedName description="AXI ERP Solutions Username" languagecode="1033" />
+    </LocalizedNames>
+  </DisplayName>
+  <Description>
+    <LocalizedNames>
+      <LocalizedName description="Gedeelde gebruikersnaam voor RPA" languagecode="1033" />
+    </LocalizedNames>
+  </Description>
+</Definition>

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityRelationships xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <EntityRelationship Name="axirpa_flow_parameter_axirpa_flow_fk" />
+  <EntityRelationship Name="axirpa_user_flow_params_axirpa_flow_params_fk" />
+  <EntityRelationship Name="business_unit_axirpa_flow" />
+  <EntityRelationship Name="business_unit_axirpa_flow_parameter" />
+  <EntityRelationship Name="business_unit_axirpa_user_flow_parameter" />
+  <EntityRelationship Name="lk_axirpa_flow_createdby" />
+  <EntityRelationship Name="lk_axirpa_flow_modifiedby" />
+  <EntityRelationship Name="lk_axirpa_flow_parameter_createdby" />
+  <EntityRelationship Name="lk_axirpa_flow_parameter_modifiedby" />
+  <EntityRelationship Name="lk_axirpa_user_flow_parameter_createdby" />
+  <EntityRelationship Name="lk_axirpa_user_flow_parameter_modifiedby" />
+  <EntityRelationship Name="owner_axirpa_flow" />
+  <EntityRelationship Name="owner_axirpa_flow_parameter" />
+  <EntityRelationship Name="owner_axirpa_user_flow_parameter" />
+  <EntityRelationship Name="team_axirpa_flow" />
+  <EntityRelationship Name="team_axirpa_flow_parameter" />
+  <EntityRelationship Name="team_axirpa_user_flow_parameter" />
+  <EntityRelationship Name="user_axirpa_flow" />
+  <EntityRelationship Name="user_axirpa_flow_parameter" />
+  <EntityRelationship Name="user_axirpa_user_flow_parameter" />
+</EntityRelationships>

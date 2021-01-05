@@ -1,0 +1,19 @@
+{
+  "EnvironmentVariableValues": [
+    {
+      "EnvironmentVariableDefinition.SchemaName": "axirpa_axi_erp_solutions_url",
+      "EnvironmentVariableValueId": "215eb637-ea4c-eb11-a813-000d3a1cc931",
+      "Value": "http://ab00s018.axi.intra/AXI/f?p=11120:101:::NO:::"
+    },
+    {
+      "EnvironmentVariableDefinition.SchemaName": "axirpa_axi_erp_solutions_username",
+      "EnvironmentVariableValueId": "c7a07fb1-eb4c-eb11-a813-000d3a1cc931",
+      "Value": "AXI_RPA"
+    },
+    {
+      "EnvironmentVariableDefinition.SchemaName": "axirpa_axi_erp_solutions_password",
+      "EnvironmentVariableValueId": "6b9f6000-ec4c-eb11-a813-000d3a1cc931",
+      "Value": "Dune2021!"
+    }
+  ]
+}
