@@ -31,7 +31,7 @@ jobs:
       with:
         environment-url: 'https://orgf5e1780e.crm.dynamics.com/'
         user-name: 'admin@M365x748229.onmicrosoft.com'
-        password-secret: ${{ secrets.password }}
+        password-secret: ${{ secrets.dev_password }}
         solution-file: out/solutions/AXIRPA.zip
         force-overwrite: true
         publish-changes: true
