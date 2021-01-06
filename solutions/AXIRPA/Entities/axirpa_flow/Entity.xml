@@ -84,7 +84,7 @@
           <MaxLength>100</MaxLength>
           <Length>200</Length>
           <displaynames>
-            <displayname description="Name" languagecode="1033" />
+            <displayname description="Flow Name" languagecode="1033" />
           </displaynames>
           <Descriptions>
             <Description description="Required name field" languagecode="1033" />
