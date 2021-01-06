@@ -90,6 +90,24 @@ jobs:
         user-name: ${{ secrets.test_username }}
         password-secret: ${{ secrets.test_password }}
 
+    - name: Replace AXI ERP URL environment variable
+      uses: jacobtomlinson/gha-find-replace@master
+      with:
+        find: "axirpa_axi_erp_solutions_url.xml"
+        replace: ${{test_axirpa_url}}
+
+    - name: Replace AXI ERP Username environment variable
+      uses: jacobtomlinson/gha-find-replace@master
+      with:
+        find: "axirpa_axi_erp_solutions_username.xml"
+        replace: ${{test_axirpa_username}}
+
+    - name: Replace AXI ERP Password environment variable
+      uses: jacobtomlinson/gha-find-replace@master
+      with:
+        find: "axirpa_axi_erp_solutions_password.xml"
+        replace: ${{test_axirpa_password}}
+
     - name: Import Solution To Test
       uses: microsoft/powerplatform-actions/import-solution@v0
       with:
