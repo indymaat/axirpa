@@ -29,8 +29,8 @@ jobs:
     - name: Import solution as unmanaged to build env
       uses: microsoft/powerplatform-actions/import-solution@v0
       with:
-        environment-url: '${{ $secrets.dev_url }}'
-        user-name: '${{ $secrets.dev_username }}'
+        environment-url: '${{ secrets.dev_url }}'
+        user-name: '${{ secrets.dev_username }}'
         password-secret: ${{ secrets.dev_password }}
         solution-file: out/solutions/AXIRPA.zip
         force-overwrite: true
@@ -39,8 +39,8 @@ jobs:
     - name: Export solution as managed
       uses: microsoft/powerplatform-actions/export-solution@v0
       with:
-        environment-url: '${{ $secrets.dev_url }}'
-        user-name: '${{ $secrets.dev_username }}'
+        environment-url: '${{ secrets.dev_url }}'
+        user-name: '${{ secrets.dev_username }}'
         password-secret: ${{ secrets.dev_password }}
         solution-name: AXIRPA
         managed: true
@@ -74,8 +74,8 @@ jobs:
     - name: Import solution to prod env
       uses: microsoft/powerplatform-actions/import-solution@v0
       with:
-        environment-url: '${{ $secrets.test_url }}'
-        user-name: '${{ $secrets.test_username }}'
+        environment-url: '${{ secrets.test_url }}'
+        user-name: '${{ secrets.test_username }}'
         password-secret: ${{ secrets.test_password }}
         solution-file: out/release/AXIRPA.zip
         force-overwrite: true
