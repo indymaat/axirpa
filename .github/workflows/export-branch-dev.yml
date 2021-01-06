@@ -37,7 +37,7 @@ jobs:
       with:
         solution-file: out/exported/AXIRPA.zip
         solution-folder: out/solutions/AXIRPA
-        solution-type: 'Unmanaged'
+        solution-type: 'Managed'
         overwrite-files: true
 
     - name: branch-solution, prepare it for a PullRequest
@@ -46,4 +46,4 @@ jobs:
         solution-folder: out/solutions/AXIRPA
         solution-target-folder: solutions/AXIRPA
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        allow-empty-commit: true
+        allow-empty-commit: false
