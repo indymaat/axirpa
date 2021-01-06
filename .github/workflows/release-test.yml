@@ -19,34 +19,46 @@ jobs:
       with:
         lfs: true
 
-    - name: Pack solution
+    # - name: Update solution version
+    #   uses: update-solution-version
+    #   with:
+    #     patch-version: # Hoe kom ik hier aan het versienummer?
+
+    - name: Verify connection with Development Environment
+      uses: microsoft/powerplatform-actions/who-am-i@v0
+      with:
+        environment-url: ${{ secrets.dev_url }}
+        user-name: ${{ secrets.dev_username }}
+        password-secret: ${{ secrets.dev_password }}
+
+    - name: Pack Solution
       uses: microsoft/powerplatform-actions/pack-solution@v0
       with:
         solution-folder: solutions/AXIRPA
         solution-file: out/solutions/AXIRPA.zip
         solution-type: Unmanaged
 
-    - name: Import solution as unmanaged to build env
+    - name: Import Solution
       uses: microsoft/powerplatform-actions/import-solution@v0
       with:
-        environment-url: '${{ secrets.dev_url }}'
-        user-name: '${{ secrets.dev_username }}'
+        environment-url: ${{ secrets.dev_url }}
+        user-name: ${{ secrets.dev_username }}
         password-secret: ${{ secrets.dev_password }}
         solution-file: out/solutions/AXIRPA.zip
         force-overwrite: true
         publish-changes: true
 
-    - name: Export solution as managed
+    - name: Export Solution
       uses: microsoft/powerplatform-actions/export-solution@v0
       with:
-        environment-url: '${{ secrets.dev_url }}'
-        user-name: '${{ secrets.dev_username }}'
+        environment-url: ${{ secrets.dev_url }}
+        user-name: ${{ secrets.dev_username }}
         password-secret: ${{ secrets.dev_password }}
         solution-name: AXIRPA
         managed: true
         solution-output-file: out/ship/AXIRPA.zip
 
-    - name: Upload the ready to ship solution to GH artifact store
+    - name: Upload Solution to GitHub Artifact Store
       uses: actions/upload-artifact@v2
       with:
         name: managedSolutions
@@ -63,7 +75,7 @@ jobs:
       with:
         lfs: true
 
-    - name: Fetch the ready to ship solution from GH artifact store
+    - name: Fetch Solution from GitHub Artifact Store
       uses: actions/download-artifact@v2
       with:
         name: managedSolutions
@@ -71,11 +83,18 @@ jobs:
 
     - run: get-childitem .\out\release\
 
-    - name: Import solution to prod env
+    - name: Verify connection with Test environment
+      uses: microsoft/powerplatform-actions/who-am-i@v0
+      with:
+        environment-url: ${{ secrets.test_url }}
+        user-name: ${{ secrets.test_username }}
+        password-secret: ${{ secrets.test_password }}
+
+    - name: Import Solution To Test
       uses: microsoft/powerplatform-actions/import-solution@v0
       with:
-        environment-url: '${{ secrets.test_url }}'
-        user-name: '${{ secrets.test_username }}'
+        environment-url: ${{ secrets.test_url }}
+        user-name: ${{ secrets.test_username }}
         password-secret: ${{ secrets.test_password }}
         solution-file: out/release/AXIRPA.zip
         force-overwrite: true

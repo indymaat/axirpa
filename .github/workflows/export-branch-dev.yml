@@ -1,4 +1,4 @@
-name: export-branch-dev
+name: export-dev
 # Export solution from DEV environment
 #  unpack it and prepare, commit and push a git branch with the changes
 
@@ -16,14 +16,14 @@ jobs:
       with:
         lfs: true
 
-    - name: who-am-i action
+    - name: Verify connection with Development environment
       uses: microsoft/powerplatform-actions/who-am-i@v0
       with:
         environment-url: ${{ secrets.dev_url }}
         user-name: ${{ secrets.dev_username }}
         password-secret: ${{ secrets.dev_password }}
 
-    - name: export-solution action
+    - name: Export Solution
       uses: microsoft/powerplatform-actions/export-solution@v0
       with:
         environment-url: ${{ secrets.dev_url }}
@@ -32,7 +32,7 @@ jobs:
         solution-name: AXIRPA
         solution-output-file: out/exported/AXIRPA.zip
 
-    - name: unpack-solution action
+    - name: Unpack Solution
       uses: microsoft/powerplatform-actions/unpack-solution@v0
       with:
         solution-file: out/exported/AXIRPA.zip
@@ -40,7 +40,7 @@ jobs:
         solution-type: 'Unmanaged'
         overwrite-files: true
 
-    - name: branch-solution, prepare it for a PullRequest
+    - name: Create branch and commit Solution Export
       uses: microsoft/powerplatform-actions/branch-solution@v0
       with:
         solution-folder: out/solutions/AXIRPA
