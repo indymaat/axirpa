@@ -21,14 +21,14 @@
   </defaultfilter>
   <iscustomreport>1</iscustomreport>
   <description>Alle Gebruikers en Parameters per Flow.</description>
-  <filename>Flows en Parameters.rdl</filename>
+  <filename>Gebruikers en Parameters.rdl</filename>
   <languagecode>1033</languagecode>
   <reportid>{e9665cd8-2c50-eb11-a813-000d3a1cc931}</reportid>
   <reporttypecode>1</reporttypecode>
   <IntroducedVersion>1.0.0.24</IntroducedVersion>
   <createdinmajorversion>9</createdinmajorversion>
   <iscustomizable>1</iscustomizable>
-  <ExportedFileName>/Reports/FlowsenParametersrdle9665cd8-2c50-eb11-a813-000d3a1cc931.wdl</ExportedFileName>
+  <ExportedFileName>/Reports/GebruikersenParametersrdle9665cd8-2c50-eb11-a813-000d3a1cc931.wdl</ExportedFileName>
   <ReportCategories />
   <ReportVisibilities>
     <ReportVisbility>2</ReportVisbility>
