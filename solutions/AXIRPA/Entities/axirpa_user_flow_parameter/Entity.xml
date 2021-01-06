@@ -19,6 +19,7 @@
           <LogicalName>axirpa_flow_parameter</LogicalName>
           <RequiredLevel>none</RequiredLevel>
           <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <ImeMode>auto</ImeMode>
           <ValidForUpdateApi>1</ValidForUpdateApi>
           <ValidForReadApi>1</ValidForReadApi>
           <ValidForCreateApi>1</ValidForCreateApi>
@@ -848,8 +849,8 @@
           <IntroducedVersion>1.0.0.0</IntroducedVersion>
           <IsCustomizable>0</IsCustomizable>
           <EntityKeyAttributes>
-            <AttributeName>axirpa_flow_parameter</AttributeName>
             <AttributeName>axirpa_username</AttributeName>
+            <AttributeName>axirpa_flow_parameter</AttributeName>
           </EntityKeyAttributes>
           <displaynames>
             <displayname description="Unique Key" languagecode="1033" />
