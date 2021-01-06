@@ -1,1 +1,456 @@
-{"properties":{"connectionReferences":{"shared_commondataserviceforapps":{"runtimeSource":"embedded","connection":{"connectionReferenceLogicalName":"axirpa_sharedcommondataserviceforapps_0eb05"},"api":{"name":"shared_commondataserviceforapps"}}},"definition":{"$schema":"https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#","contentVersion":"1.0.0.0","parameters":{"$connections":{"defaultValue":{},"type":"Object"},"$authentication":{"defaultValue":{},"type":"SecureObject"}},"triggers":{"manual":{"type":"Request","kind":"Http","inputs":{"schema":{"type":"object","properties":{"Parameters":{"type":"array","items":{"type":"object","properties":{"Name":{"type":"string"},"Value":{"type":"string"}},"required":["Name","Value"]}},"Config":{"type":"object","properties":{"Flowname":{"type":"string"},"Username":{"type":"string"},"Endpoint":{"type":"string"}}}}},"method":"POST"}}},"actions":{"Init_FlowID":{"runAfter":{},"type":"InitializeVariable","inputs":{"variables":[{"name":"FlowID","type":"string"}]}},"List_Flow":{"runAfter":{"If_No_Parameters_Provided":["Succeeded"]},"type":"OpenApiConnection","inputs":{"host":{"connectionName":"shared_commondataserviceforapps","operationId":"ListRecords","apiId":"/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"},"parameters":{"entityName":"axirpa_flows","$select":"axirpa_flowid","$filter":"axirpa_name eq '@{triggerBody()?['Config']?['Flowname']}'","$top":1},"authentication":"@parameters('$authentication')"}},"If_no_Flow_found":{"actions":{"HTTP_-_Error_-_Flow_Does_Not_Exist":{"runAfter":{},"type":"Http","inputs":{"method":"POST","uri":"@triggerBody()?['Config']?['Endpoint']","body":{"success":false,"errors":[{"message":"Flow \"@{triggerBody()?['Config']?['Flowname']}\" does not exist."}],"request_body":"@triggerBody()"}}},"End_No_Flow":{"runAfter":{"HTTP_-_Error_-_Flow_Does_Not_Exist":["Succeeded"]},"type":"Terminate","inputs":{"runStatus":"Succeeded"}}},"runAfter":{"List_Flow":["Succeeded"]},"expression":{"equals":["@empty(body('List_Flow')?['value'])","@true"]},"type":"If"},"Init_Results":{"runAfter":{"Init_FlowID":["Succeeded"]},"type":"InitializeVariable","inputs":{"variables":[{"name":"Results","type":"array"}]}},"Init_Errors":{"runAfter":{"Init_Results":["Succeeded"]},"type":"InitializeVariable","inputs":{"variables":[{"name":"Errors","type":"array"}]}},"If_No_Parameters_Provided":{"actions":{"HTTP_-_Error_-_No_Parameters":{"runAfter":{},"type":"Http","inputs":{"method":"POST","uri":"@triggerBody()?['Config']?['Endpoint']","body":{"success":false,"errors":[{"message":"No parameters were provided."}],"request_body":"@triggerBody()"}}},"End_No_Parameters":{"runAfter":{"HTTP_-_Error_-_No_Parameters":["Succeeded"]},"type":"Terminate","inputs":{"runStatus":"Succeeded"}}},"runAfter":{"Init_Errors":["Succeeded"]},"expression":{"equals":["@length(triggerBody()?['Parameters'])",0]},"type":"If"},"HTTP_-_Success":{"runAfter":{"Loop_Existing_Parameters":["Succeeded"]},"type":"Http","inputs":{"method":"POST","uri":"@triggerBody()?['Config']?['Endpoint']","body":{"success":true,"results":"@variables('Results')","errors":"@variables('Errors')","request_body":"@triggerBody()"}}},"Loop_Existing_Parameters":{"foreach":"@triggerBody()?['Parameters']","actions":{"List_Flow_Parameter":{"runAfter":{},"type":"OpenApiConnection","inputs":{"host":{"connectionName":"shared_commondataserviceforapps","operationId":"ListRecords","apiId":"/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"},"parameters":{"entityName":"axirpa_flow_parameters","$select":"axirpa_flow_parameterid, axirpa_name","$filter":"axirpa_name eq '@{items('Loop_Existing_Parameters')?['Name']}' and _axirpa_flow_value eq '@{variables('FlowID')}'","$top":1},"authentication":"@parameters('$authentication')"}},"If_Corresponding_Flow_Parameter_Found":{"actions":{"Set_Flow_Parameter_Variables":{"foreach":"@outputs('List_Flow_Parameter')?['body/value']","actions":{"List_User_Flow_Parameters_Loop":{"foreach":"@outputs('List_Flow_Parameter')?['body/value']","actions":{"List_User_Flow_Parameter":{"runAfter":{},"type":"OpenApiConnection","inputs":{"host":{"connectionName":"shared_commondataserviceforapps","operationId":"ListRecords","apiId":"/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"},"parameters":{"entityName":"axirpa_user_flow_parameters","$select":"axirpa_user_flow_parameterid,axirpa_value","$filter":"axirpa_username eq '@{triggerBody()?['Config']?['Username']}' and _axirpa_flow_parameter_value eq '@{items('Set_Flow_Parameter_Variables')?['axirpa_flow_parameterid']}'","$expand":"axirpa_flow_parameter($filter=axirpa_name eq '@{items('Loop_Existing_Parameters')?['Name']}')","$top":1},"authentication":"@parameters('$authentication')"}},"If_no_User_Flow_Parameter_found":{"actions":{"Create_User_Flow_Parameter":{"runAfter":{},"type":"OpenApiConnection","inputs":{"host":{"connectionName":"shared_commondataserviceforapps","operationId":"CreateRecord","apiId":"/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"},"parameters":{"entityName":"axirpa_user_flow_parameters","item/axirpa_username":"@triggerBody()?['Config']?['Username']","item/axirpa_value":"@items('Loop_Existing_Parameters')?['Value']"},"authentication":"@parameters('$authentication')"}},"Relate_Records":{"runAfter":{"Create_User_Flow_Parameter":["Succeeded"]},"type":"OpenApiConnection","inputs":{"host":{"connectionName":"shared_commondataserviceforapps","operationId":"AssociateEntities","apiId":"/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"},"parameters":{"entityName":"axirpa_flow_parameters","recordId":"@items('Set_Flow_Parameter_Variables')?['axirpa_flow_parameterid']","associationEntityRelationship":"axirpa_user_flow_params_axirpa_flow_params_fk","item/@odata.id":"@outputs('Create_User_Flow_Parameter')?['body/@odata.id']"},"authentication":"@parameters('$authentication')"}},"Add_Created_To_Log":{"runAfter":{"Relate_Records":["Succeeded"]},"type":"AppendToArrayVariable","inputs":{"name":"Results","value":{"type":"created","flow":"@triggerBody()?['Config']?['Flowname']","parameter_name":"@items('Loop_Existing_Parameters')?['Name']","new_value":"@items('Loop_Existing_Parameters')?['Value']","message":"The parameter \"@{items('Loop_Existing_Parameters')?['Name']}\" for flow \"@{triggerBody()?['Config']?['Flowname']}\" was created with value \"@{items('Loop_Existing_Parameters')?['Value']}\"."}}}},"runAfter":{"List_User_Flow_Parameter":["Succeeded"]},"else":{"actions":{"Set_User_Flow_Parameter_Variabeles":{"foreach":"@outputs('List_User_Flow_Parameter')?['body/value']","actions":{"If_Provided_Value_Is_Equal_To_Existing_Value":{"actions":{"Update_User_Flow_Parameter":{"runAfter":{},"type":"OpenApiConnection","inputs":{"host":{"connectionName":"shared_commondataserviceforapps","operationId":"UpdateRecord","apiId":"/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"},"parameters":{"entityName":"axirpa_user_flow_parameters","recordId":"@items('Set_User_Flow_Parameter_Variabeles')?['axirpa_user_flow_parameterid']","item/axirpa_username":"@triggerBody()?['Config']?['Username']","item/axirpa_value":"@items('Loop_Existing_Parameters')?['Value']"},"authentication":"@parameters('$authentication')"}},"Add_Update_To_Log":{"runAfter":{"Update_User_Flow_Parameter":["Succeeded"]},"type":"AppendToArrayVariable","inputs":{"name":"Results","value":{"type":"updated","flow":"@triggerBody()?['Config']?['Flowname']","parameter_name":"@items('Loop_Existing_Parameters')?['Name']","old_value":"@if(equals(items('Set_User_Flow_Parameter_Variabeles')?['axirpa_value'], null), '', items('Set_User_Flow_Parameter_Variabeles')?['axirpa_value'])","new_value":"@items('Loop_Existing_Parameters')?['Value']","message":"The parameter \"@{items('Loop_Existing_Parameters')?['Name']}\" for flow \"@{triggerBody()?['Config']?['Flowname']}\" was updated from \"@{items('Set_User_Flow_Parameter_Variabeles')?['axirpa_value']}\" to \"@{items('Loop_Existing_Parameters')?['Value']}\"."}}}},"runAfter":{},"else":{"actions":{"Add_Equal_To_Log":{"runAfter":{},"type":"AppendToArrayVariable","inputs":{"name":"Results","value":{"type":"equal","flow":"@triggerBody()?['Config']?['Flowname']","parameter_name":"@items('Loop_Existing_Parameters')?['Name']","old_value":"@if(equals(items('Set_User_Flow_Parameter_Variabeles')?['axirpa_value'], null), '', items('Set_User_Flow_Parameter_Variabeles')?['axirpa_value'])","new_value":"@items('Loop_Existing_Parameters')?['Value']","message":"The value of parameter \"@{items('Loop_Existing_Parameters')?['Name']}\" for flow \"@{triggerBody()?['Config']?['Flowname']}\" remained \"@{items('Loop_Existing_Parameters')?['Value']}\"."}}}}},"expression":{"not":{"equals":["@if(equals(items('Set_User_Flow_Parameter_Variabeles')?['axirpa_value'], null), '', items('Set_User_Flow_Parameter_Variabeles')?['axirpa_value'])","@items('Loop_Existing_Parameters')?['Value']"]}},"type":"If"}},"runAfter":{},"type":"Foreach"}}},"expression":{"equals":["@empty(body('List_User_Flow_Parameter')?['value'])","@true"]},"type":"If"}},"runAfter":{},"type":"Foreach","runtimeConfiguration":{"concurrency":{"repetitions":1}}}},"runAfter":{},"type":"Foreach","runtimeConfiguration":{"concurrency":{"repetitions":1}}}},"runAfter":{"List_Flow_Parameter":["Succeeded"]},"else":{"actions":{"Add_Non_Existant_Parameter_To_Log":{"runAfter":{},"type":"AppendToArrayVariable","inputs":{"name":"Errors","value":{"type":"non_existant_parameter","flow":"@triggerBody()?['Config']?['Flowname']","parameter_name":"@items('Loop_Existing_Parameters')?['Name']","message":"The parameter \"@{items('Loop_Existing_Parameters')?['Name']}\" for flow \"@{triggerBody()?['Config']?['Flowname']}\" does not exist."}}}}},"expression":{"not":{"equals":["@empty(body('List_Flow_Parameter')?['value'])","@true"]}},"type":"If"}},"runAfter":{"List_Flow_Result":["Succeeded"]},"type":"Foreach","runtimeConfiguration":{"concurrency":{"repetitions":50}}},"List_Flow_Result":{"foreach":"@outputs('List_Flow')?['body/value']","actions":{"Set_FlowID":{"runAfter":{},"type":"SetVariable","inputs":{"name":"FlowID","value":"@items('List_Flow_Result')?['axirpa_flowid']"}}},"runAfter":{"If_no_Flow_found":["Succeeded"]},"type":"Foreach"}},"outputs":{}}},"schemaVersion":"1.0.0.0"}
+{
+	"properties": {
+		"connectionReferences": {
+			"shared_commondataserviceforapps": {
+				"runtimeSource": "embedded",
+				"connection": {
+					"connectionReferenceLogicalName": "axirpa_sharedcommondataserviceforapps_0eb05"
+				},
+				"api": { "name": "shared_commondataserviceforapps" }
+			}
+		},
+		"definition": {
+			"$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+			"contentVersion": "1.0.0.0",
+			"parameters": {
+				"$connections": { "defaultValue": {}, "type": "Object" },
+				"$authentication": {
+					"defaultValue": {},
+					"type": "SecureObject"
+				}
+			},
+			"triggers": {
+				"manual": {
+					"type": "Request",
+					"kind": "Http",
+					"inputs": {
+						"schema": {
+							"type": "object",
+							"properties": {
+								"Parameters": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"Name": { "type": "string" },
+											"Value": { "type": "string" }
+										},
+										"required": ["Name", "Value"]
+									}
+								},
+								"Config": {
+									"type": "object",
+									"properties": {
+										"Flowname": { "type": "string" },
+										"Username": { "type": "string" },
+										"Endpoint": { "type": "string" }
+									}
+								}
+							}
+						},
+						"method": "POST"
+					}
+				}
+			},
+			"actions": {
+				"Init_FlowID": {
+					"runAfter": {},
+					"type": "InitializeVariable",
+					"inputs": {
+						"variables": [{ "name": "FlowID", "type": "string" }]
+					}
+				},
+				"List_Flow": {
+					"runAfter": { "If_No_Parameters_Provided": ["Succeeded"] },
+					"type": "OpenApiConnection",
+					"inputs": {
+						"host": {
+							"connectionName": "shared_commondataserviceforapps",
+							"operationId": "ListRecords",
+							"apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+						},
+						"parameters": {
+							"entityName": "axirpa_flows",
+							"$select": "axirpa_flowid",
+							"$filter": "axirpa_name eq '@{triggerBody()?['Config']?['Flowname']}'",
+							"$top": 1
+						},
+						"authentication": "@parameters('$authentication')"
+					}
+				},
+				"If_no_Flow_found": {
+					"actions": {
+						"HTTP_-_Error_-_Flow_Does_Not_Exist": {
+							"runAfter": {},
+							"type": "Http",
+							"inputs": {
+								"method": "POST",
+								"uri": "@triggerBody()?['Config']?['Endpoint']",
+								"body": {
+									"success": false,
+									"errors": [
+										{
+											"message": "Flow \"@{triggerBody()?['Config']?['Flowname']}\" does not exist."
+										}
+									],
+									"request_body": "@triggerBody()"
+								}
+							}
+						},
+						"End_No_Flow": {
+							"runAfter": {
+								"HTTP_-_Error_-_Flow_Does_Not_Exist": [
+									"Succeeded"
+								]
+							},
+							"type": "Terminate",
+							"inputs": { "runStatus": "Succeeded" }
+						}
+					},
+					"runAfter": { "List_Flow": ["Succeeded"] },
+					"expression": {
+						"equals": [
+							"@empty(body('List_Flow')?['value'])",
+							"@true"
+						]
+					},
+					"type": "If"
+				},
+				"Init_Results": {
+					"runAfter": { "Init_FlowID": ["Succeeded"] },
+					"type": "InitializeVariable",
+					"inputs": {
+						"variables": [{ "name": "Results", "type": "array" }]
+					}
+				},
+				"Init_Errors": {
+					"runAfter": { "Init_Results": ["Succeeded"] },
+					"type": "InitializeVariable",
+					"inputs": {
+						"variables": [{ "name": "Errors", "type": "array" }]
+					}
+				},
+				"If_No_Parameters_Provided": {
+					"actions": {
+						"HTTP_-_Error_-_No_Parameters": {
+							"runAfter": {},
+							"type": "Http",
+							"inputs": {
+								"method": "POST",
+								"uri": "@triggerBody()?['Config']?['Endpoint']",
+								"body": {
+									"success": false,
+									"errors": [
+										{
+											"message": "No parameters were provided."
+										}
+									],
+									"request_body": "@triggerBody()"
+								}
+							}
+						},
+						"End_No_Parameters": {
+							"runAfter": {
+								"HTTP_-_Error_-_No_Parameters": ["Succeeded"]
+							},
+							"type": "Terminate",
+							"inputs": { "runStatus": "Succeeded" }
+						}
+					},
+					"runAfter": { "Init_Errors": ["Succeeded"] },
+					"expression": {
+						"equals": ["@length(triggerBody()?['Parameters'])", 0]
+					},
+					"type": "If"
+				},
+				"HTTP_-_Success": {
+					"runAfter": { "Loop_Existing_Parameters": ["Succeeded"] },
+					"type": "Http",
+					"inputs": {
+						"method": "POST",
+						"uri": "@triggerBody()?['Config']?['Endpoint']",
+						"body": {
+							"success": true,
+							"results": "@variables('Results')",
+							"errors": "@variables('Errors')",
+							"request_body": "@triggerBody()"
+						}
+					}
+				},
+				"Loop_Existing_Parameters": {
+					"foreach": "@triggerBody()?['Parameters']",
+					"actions": {
+						"List_Flow_Parameter": {
+							"runAfter": {},
+							"type": "OpenApiConnection",
+							"inputs": {
+								"host": {
+									"connectionName": "shared_commondataserviceforapps",
+									"operationId": "ListRecords",
+									"apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+								},
+								"parameters": {
+									"entityName": "axirpa_flow_parameters",
+									"$select": "axirpa_flow_parameterid, axirpa_name",
+									"$filter": "axirpa_name eq '@{items('Loop_Existing_Parameters')?['Name']}' and _axirpa_flow_value eq '@{variables('FlowID')}'",
+									"$top": 1
+								},
+								"authentication": "@parameters('$authentication')"
+							}
+						},
+						"If_Corresponding_Flow_Parameter_Found": {
+							"actions": {
+								"Set_Flow_Parameter_Variables": {
+									"foreach": "@outputs('List_Flow_Parameter')?['body/value']",
+									"actions": {
+										"List_User_Flow_Parameters_Loop": {
+											"foreach": "@outputs('List_Flow_Parameter')?['body/value']",
+											"actions": {
+												"List_User_Flow_Parameter": {
+													"runAfter": {},
+													"type": "OpenApiConnection",
+													"inputs": {
+														"host": {
+															"connectionName": "shared_commondataserviceforapps",
+															"operationId": "ListRecords",
+															"apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+														},
+														"parameters": {
+															"entityName": "axirpa_user_flow_parameters",
+															"$select": "axirpa_user_flow_parameterid,axirpa_value",
+															"$filter": "axirpa_username eq '@{triggerBody()?['Config']?['Username']}' and _axirpa_flow_parameter_value eq '@{items('Set_Flow_Parameter_Variables')?['axirpa_flow_parameterid']}'",
+															"$expand": "axirpa_flow_parameter($filter=axirpa_name eq '@{items('Loop_Existing_Parameters')?['Name']}')",
+															"$top": 1
+														},
+														"authentication": "@parameters('$authentication')"
+													}
+												},
+												"If_no_User_Flow_Parameter_found": {
+													"actions": {
+														"Create_User_Flow_Parameter": {
+															"runAfter": {},
+															"type": "OpenApiConnection",
+															"inputs": {
+																"host": {
+																	"connectionName": "shared_commondataserviceforapps",
+																	"operationId": "CreateRecord",
+																	"apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+																},
+																"parameters": {
+																	"entityName": "axirpa_user_flow_parameters",
+																	"item/axirpa_username": "@triggerBody()?['Config']?['Username']",
+																	"item/axirpa_value": "@items('Loop_Existing_Parameters')?['Value']"
+																},
+																"authentication": "@parameters('$authentication')"
+															}
+														},
+														"Relate_Records": {
+															"runAfter": {
+																"Create_User_Flow_Parameter": [
+																	"Succeeded"
+																]
+															},
+															"type": "OpenApiConnection",
+															"inputs": {
+																"host": {
+																	"connectionName": "shared_commondataserviceforapps",
+																	"operationId": "AssociateEntities",
+																	"apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+																},
+																"parameters": {
+																	"entityName": "axirpa_flow_parameters",
+																	"recordId": "@items('Set_Flow_Parameter_Variables')?['axirpa_flow_parameterid']",
+																	"associationEntityRelationship": "axirpa_user_flow_params_axirpa_flow_params_fk",
+																	"item/@odata.id": "@outputs('Create_User_Flow_Parameter')?['body/@odata.id']"
+																},
+																"authentication": "@parameters('$authentication')"
+															}
+														},
+														"Add_Created_To_Log": {
+															"runAfter": {
+																"Relate_Records": [
+																	"Succeeded"
+																]
+															},
+															"type": "AppendToArrayVariable",
+															"inputs": {
+																"name": "Results",
+																"value": {
+																	"type": "created",
+																	"flow": "@triggerBody()?['Config']?['Flowname']",
+																	"parameter_name": "@items('Loop_Existing_Parameters')?['Name']",
+																	"new_value": "@items('Loop_Existing_Parameters')?['Value']",
+																	"message": "The parameter \"@{items('Loop_Existing_Parameters')?['Name']}\" for flow \"@{triggerBody()?['Config']?['Flowname']}\" was created with value \"@{items('Loop_Existing_Parameters')?['Value']}\"."
+																}
+															}
+														}
+													},
+													"runAfter": {
+														"List_User_Flow_Parameter": [
+															"Succeeded"
+														]
+													},
+													"else": {
+														"actions": {
+															"Set_User_Flow_Parameter_Variabeles": {
+																"foreach": "@outputs('List_User_Flow_Parameter')?['body/value']",
+																"actions": {
+																	"If_Provided_Value_Is_Equal_To_Existing_Value": {
+																		"actions": {
+																			"Update_User_Flow_Parameter": {
+																				"runAfter": {},
+																				"type": "OpenApiConnection",
+																				"inputs": {
+																					"host": {
+																						"connectionName": "shared_commondataserviceforapps",
+																						"operationId": "UpdateRecord",
+																						"apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+																					},
+																					"parameters": {
+																						"entityName": "axirpa_user_flow_parameters",
+																						"recordId": "@items('Set_User_Flow_Parameter_Variabeles')?['axirpa_user_flow_parameterid']",
+																						"item/axirpa_username": "@triggerBody()?['Config']?['Username']",
+																						"item/axirpa_value": "@items('Loop_Existing_Parameters')?['Value']"
+																					},
+																					"authentication": "@parameters('$authentication')"
+																				}
+																			},
+																			"Add_Update_To_Log": {
+																				"runAfter": {
+																					"Update_User_Flow_Parameter": [
+																						"Succeeded"
+																					]
+																				},
+																				"type": "AppendToArrayVariable",
+																				"inputs": {
+																					"name": "Results",
+																					"value": {
+																						"type": "updated",
+																						"flow": "@triggerBody()?['Config']?['Flowname']",
+																						"parameter_name": "@items('Loop_Existing_Parameters')?['Name']",
+																						"old_value": "@if(equals(items('Set_User_Flow_Parameter_Variabeles')?['axirpa_value'], null), '', items('Set_User_Flow_Parameter_Variabeles')?['axirpa_value'])",
+																						"new_value": "@items('Loop_Existing_Parameters')?['Value']",
+																						"message": "The parameter \"@{items('Loop_Existing_Parameters')?['Name']}\" for flow \"@{triggerBody()?['Config']?['Flowname']}\" was updated from \"@{items('Set_User_Flow_Parameter_Variabeles')?['axirpa_value']}\" to \"@{items('Loop_Existing_Parameters')?['Value']}\"."
+																					}
+																				}
+																			}
+																		},
+																		"runAfter": {},
+																		"else": {
+																			"actions": {
+																				"Add_Equal_To_Log": {
+																					"runAfter": {},
+																					"type": "AppendToArrayVariable",
+																					"inputs": {
+																						"name": "Results",
+																						"value": {
+																							"type": "equal",
+																							"flow": "@triggerBody()?['Config']?['Flowname']",
+																							"parameter_name": "@items('Loop_Existing_Parameters')?['Name']",
+																							"old_value": "@if(equals(items('Set_User_Flow_Parameter_Variabeles')?['axirpa_value'], null), '', items('Set_User_Flow_Parameter_Variabeles')?['axirpa_value'])",
+																							"new_value": "@items('Loop_Existing_Parameters')?['Value']",
+																							"message": "The value of parameter \"@{items('Loop_Existing_Parameters')?['Name']}\" for flow \"@{triggerBody()?['Config']?['Flowname']}\" remained \"@{items('Loop_Existing_Parameters')?['Value']}\"."
+																						}
+																					}
+																				}
+																			}
+																		},
+																		"expression": {
+																			"not": {
+																				"equals": [
+																					"@if(equals(items('Set_User_Flow_Parameter_Variabeles')?['axirpa_value'], null), '', items('Set_User_Flow_Parameter_Variabeles')?['axirpa_value'])",
+																					"@items('Loop_Existing_Parameters')?['Value']"
+																				]
+																			}
+																		},
+																		"type": "If"
+																	}
+																},
+																"runAfter": {},
+																"type": "Foreach"
+															}
+														}
+													},
+													"expression": {
+														"equals": [
+															"@empty(body('List_User_Flow_Parameter')?['value'])",
+															"@true"
+														]
+													},
+													"type": "If"
+												}
+											},
+											"runAfter": {},
+											"type": "Foreach",
+											"runtimeConfiguration": {
+												"concurrency": {
+													"repetitions": 1
+												}
+											}
+										}
+									},
+									"runAfter": {},
+									"type": "Foreach",
+									"runtimeConfiguration": {
+										"concurrency": { "repetitions": 1 }
+									}
+								}
+							},
+							"runAfter": {
+								"List_Flow_Parameter": ["Succeeded"]
+							},
+							"else": {
+								"actions": {
+									"Add_Non_Existant_Parameter_To_Log": {
+										"runAfter": {},
+										"type": "AppendToArrayVariable",
+										"inputs": {
+											"name": "Errors",
+											"value": {
+												"type": "non_existant_parameter",
+												"flow": "@triggerBody()?['Config']?['Flowname']",
+												"parameter_name": "@items('Loop_Existing_Parameters')?['Name']",
+												"message": "The parameter \"@{items('Loop_Existing_Parameters')?['Name']}\" for flow \"@{triggerBody()?['Config']?['Flowname']}\" does not exist."
+											}
+										}
+									}
+								}
+							},
+							"expression": {
+								"not": {
+									"equals": [
+										"@empty(body('List_Flow_Parameter')?['value'])",
+										"@true"
+									]
+								}
+							},
+							"type": "If"
+						}
+					},
+					"runAfter": { "List_Flow_Result": ["Succeeded"] },
+					"type": "Foreach",
+					"runtimeConfiguration": {
+						"concurrency": { "repetitions": 50 }
+					}
+				},
+				"List_Flow_Result": {
+					"foreach": "@outputs('List_Flow')?['body/value']",
+					"actions": {
+						"Set_FlowID": {
+							"runAfter": {},
+							"type": "SetVariable",
+							"inputs": {
+								"name": "FlowID",
+								"value": "@items('List_Flow_Result')?['axirpa_flowid']"
+							}
+						}
+					},
+					"runAfter": { "If_no_Flow_found": ["Succeeded"] },
+					"type": "Foreach"
+				}
+			},
+			"outputs": {}
+		}
+	},
+	"schemaVersion": "1.0.0.0"
+}
