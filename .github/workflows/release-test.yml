@@ -115,5 +115,5 @@ jobs:
         user-name: ${{ secrets.test_username }}
         password-secret: ${{ secrets.test_password }}
         solution-file: out/release/AXIRPA.zip
-        force-overwrite: false
+        force-overwrite: true
         publish-changes: true
