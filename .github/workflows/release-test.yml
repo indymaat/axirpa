@@ -90,25 +90,6 @@ jobs:
         user-name: ${{ secrets.test_username }}
         password-secret: ${{ secrets.test_password }}
 
-    - name: Replace Development URL with Test
-      uses: datamonsters/replace-action@v2
-      with:
-        files: "solutions/AXIRPA/EnvironmentVariables/environment_variable_values.json"
-        replacements: '${{ secrets.dev_axirpa_url }}=${{ secrets.test_axirpa_url }}'
-
-    - name: Replace Development username with Test
-      uses: datamonsters/replace-action@v2
-      with:
-        files: "solutions/AXIRPA/EnvironmentVariables/environment_variable_values.json"
-        replacements: '${{ secrets.dev_axirpa_username }}=${{ secrets.test_axirpa_username }}'
-
-    - name: Replace Development password with Test
-      uses: datamonsters/replace-action@v2
-      with:
-        files: "solutions/AXIRPA/EnvironmentVariables/environment_variable_values.json"
-        replacements: '${{ secrets.dev_axirpa_password }}=${{ secrets.test_axirpa_password }}'
-
-
     - name: Import Solution To Test
       uses: microsoft/powerplatform-actions/import-solution@v0
       with:
