@@ -91,19 +91,19 @@ jobs:
         password-secret: ${{ secrets.test_password }}
 
     - name: Replace AXI ERP URL environment variable
-      uses: datamonsters/replace-action
+      uses: datamonsters/replace-action@v2
       with:
         files: "solutions/AXIRPA/EnvironmentVariables/axirpa_axi_erp_solutions_url"
         replacements: '${{ secrets.dev_axirpa_url}}=${{ secrets.test_axirpa_url}}'
 
     - name: Replace AXI ERP Username environment variable
-      uses: datamonsters/replace-action
+      uses: datamonsters/replace-action@v2
       with:
         files: "solutions/AXIRPA/EnvironmentVariables/axirpa_axi_erp_solutions_username"
         replacements: '${{ secrets.dev_axirpa_username}}=${{ secrets.test_axirpa_username}}'
 
     - name: Replace AXI ERP Password environment variable
-      uses: datamonsters/replace-action
+      uses: datamonsters/replace-action@v2
       with:
         files: "solutions/AXIRPA/EnvironmentVariables/axirpa_axi_erp_solutions_password"
         replacements: '${{ secrets.dev_axirpa_password}}=${{ secrets.test_axirpa_password}}'
