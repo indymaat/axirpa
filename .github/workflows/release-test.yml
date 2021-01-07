@@ -94,19 +94,19 @@ jobs:
       uses: datamonsters/replace-action@v2
       with:
         files: "solutions/AXIRPA/EnvironmentVariables/environment_variable_values.json"
-        replacements: '"${{ secrets.dev_axirpa_url }}=${{ secrets.test_axirpa_url }},${{ secrets.dev_axirpa_username }}=${{ secrets.test_axirpa_username }},${{ secrets.dev_axirpa_password }}=${{ secrets.test_axirpa_password }}'
+        replacements: '${{ secrets.dev_axirpa_url }}=${{ secrets.test_axirpa_url }}'
 
     - name: Replace Development username with Test
       uses: datamonsters/replace-action@v2
       with:
         files: "solutions/AXIRPA/EnvironmentVariables/environment_variable_values.json"
-        replacements: '"${{ secrets.dev_axirpa_url }}=${{ secrets.test_axirpa_url }},${{ secrets.dev_axirpa_username }}=${{ secrets.test_axirpa_username }},${{ secrets.dev_axirpa_password }}=${{ secrets.test_axirpa_password }}'
+        replacements: '${{ secrets.dev_axirpa_username }}=${{ secrets.test_axirpa_username }}'
 
     - name: Replace Development password with Test
       uses: datamonsters/replace-action@v2
       with:
         files: "solutions/AXIRPA/EnvironmentVariables/environment_variable_values.json"
-        replacements: '"${{ secrets.dev_axirpa_url }}=${{ secrets.test_axirpa_url }},${{ secrets.dev_axirpa_username }}=${{ secrets.test_axirpa_username }},${{ secrets.dev_axirpa_password }}=${{ secrets.test_axirpa_password }}'
+        replacements: '${{ secrets.dev_axirpa_password }}=${{ secrets.test_axirpa_password }}'
 
 
     - name: Import Solution To Test
