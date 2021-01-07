@@ -3,7 +3,7 @@
   <SchemaName>axirpa_axi_erp_solutions_username</SchemaName>
   <IsRequired>0</IsRequired>
   <Type>100000000</Type>
-  <DefaultValue xsi:nil="true"></DefaultValue>
+  <DefaultValue></DefaultValue>
   <DisplayName>
     <LocalizedNames>
       <LocalizedName description="AXI ERP Solutions Username" languagecode="1033" />
