@@ -1,0 +1,30 @@
+name: replace-environment-variables
+
+jobs:
+  replace-environment-variables:
+      runs-on: windows-latest
+      env:
+        RUNNER_DEBUG: 1
+
+      steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+
+      - name: Replace Development URL with Test
+        uses: datamonsters/replace-action@v2
+        with:
+          files: "solutions/AXIRPA/EnvironmentVariables/environment_variable_values.json"
+          replacements: '${{ secrets.dev_axirpa_url }}=${{ secrets.test_axirpa_url }}'
+
+      - name: Replace Development username with Test
+        uses: datamonsters/replace-action@v2
+        with:
+          files: "solutions/AXIRPA/EnvironmentVariables/environment_variable_values.json"
+          replacements: '${{ secrets.dev_axirpa_username }}=${{ secrets.test_axirpa_username }}'
+
+      - name: Replace Development password with Test
+        uses: datamonsters/replace-action@v2
+        with:
+          files: "solutions/AXIRPA/EnvironmentVariables/environment_variable_values.json"
+          replacements: '${{ secrets.dev_axirpa_password }}=${{ secrets.test_axirpa_password }}'
