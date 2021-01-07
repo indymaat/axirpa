@@ -1,5 +1,8 @@
 name: replace-environment-variables
 
+on:
+  workflow_dispatch:
+
 jobs:
   replace-environment-variables:
       runs-on: windows-latest
