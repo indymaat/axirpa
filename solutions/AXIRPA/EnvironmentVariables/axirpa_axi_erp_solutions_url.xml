@@ -3,7 +3,7 @@
   <SchemaName>axirpa_axi_erp_solutions_url</SchemaName>
   <IsRequired>0</IsRequired>
   <Type>100000000</Type>
-  <DefaultValue></DefaultValue>
+  <DefaultValue xsi:nil="true"></DefaultValue>
   <DisplayName>
     <LocalizedNames>
       <LocalizedName description="AXI ERP Solutions URL" languagecode="1033" />
