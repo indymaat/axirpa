@@ -88,17 +88,26 @@
       <RootComponent type="29" id="{6af867e6-9469-4cb9-93be-42e171198f0c}" behavior="0" />
       <RootComponent type="29" id="{8ea1c1c8-fc4c-eb11-a813-000d3a1cc931}" behavior="0" />
       <RootComponent type="29" id="{d8b19532-664f-eb11-a813-000d3a1cc931}" behavior="0" />
+      <RootComponent type="29" id="{f8250698-2551-eb11-a813-000d3a9d27b0}" behavior="0" />
       <RootComponent type="31" id="{e9665cd8-2c50-eb11-a813-000d3a1cc931}" behavior="0" />
       <RootComponent type="31" id="{efb0eda7-3950-eb11-a813-000d3a1cc931}" behavior="0" />
     </RootComponents>
     <MissingDependencies>
       <MissingDependency>
-        <Required key="0" type="1" schemaName="environmentvariabledefinition" displayName="Environment Variable Definition" solution="EnvironmentVariables (1.0.2.50)" />
-        <Dependent key="1" type="29" displayName="HTTP - Start" id="{69ec29b2-ee4c-eb11-a813-000d3a1cc931}" />
+        <Required key="0" type="1" schemaName="environmentvariablevalue" displayName="Environment Variable Value" solution="EnvironmentVariables (1.0.2.50)" />
+        <Dependent key="1" type="29" displayName="Email - Start Flow" id="{f8250698-2551-eb11-a813-000d3a9d27b0}" />
       </MissingDependency>
       <MissingDependency>
-        <Required key="2" type="1" schemaName="environmentvariablevalue" displayName="Environment Variable Value" solution="EnvironmentVariables (1.0.2.50)" />
-        <Dependent key="1" type="29" displayName="HTTP - Start" id="{69ec29b2-ee4c-eb11-a813-000d3a1cc931}" />
+        <Required key="2" type="1" schemaName="environmentvariabledefinition" displayName="Environment Variable Definition" solution="EnvironmentVariables (1.0.2.50)" />
+        <Dependent key="1" type="29" displayName="Email - Start Flow" id="{f8250698-2551-eb11-a813-000d3a9d27b0}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="2" type="1" schemaName="environmentvariabledefinition" displayName="Environment Variable Definition" solution="EnvironmentVariables (1.0.2.50)" />
+        <Dependent key="3" type="29" displayName="HTTP - Start Flow" id="{69ec29b2-ee4c-eb11-a813-000d3a1cc931}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="0" type="1" schemaName="environmentvariablevalue" displayName="Environment Variable Value" solution="EnvironmentVariables (1.0.2.50)" />
+        <Dependent key="3" type="29" displayName="HTTP - Start Flow" id="{69ec29b2-ee4c-eb11-a813-000d3a1cc931}" />
       </MissingDependency>
     </MissingDependencies>
   </SolutionManifest>

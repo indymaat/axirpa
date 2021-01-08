@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Workflow WorkflowId="{69ec29b2-ee4c-eb11-a813-000d3a1cc931}" Name="HTTP - Start" Description="Start een Flow op basis van de volgende configuratie:&#xA;{&#xA;    &quot;Config&quot;: {&#xA;        &quot;Flowname&quot;: &quot;&lt;Flowname&gt;&quot;,&#xA;        &quot;Username&quot;: &quot;&lt;Username&gt;&quot;,&#xA;        &quot;Endpoint&quot;: &quot;&lt;HTTP endpoint&gt;&quot;&#xA;    }&#xA;}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <JsonFileName>/Workflows/HTTP-Start-69EC29B2-EE4C-EB11-A813-000D3A1CC931.json</JsonFileName>
+<Workflow WorkflowId="{69ec29b2-ee4c-eb11-a813-000d3a1cc931}" Name="HTTP - Start Flow" Description="Start een Flow op basis van de volgende configuratie:&#xA;{&#xA;    &quot;Config&quot;: {&#xA;        &quot;Flowname&quot;: &quot;&lt;Flowname&gt;&quot;,&#xA;        &quot;Username&quot;: &quot;&lt;Username&gt;&quot;,&#xA;        &quot;Endpoint&quot;: &quot;&lt;HTTP endpoint&gt;&quot;&#xA;    }&#xA;}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <JsonFileName>/Workflows/HTTP-StartFlow-69EC29B2-EE4C-EB11-A813-000D3A1CC931.json</JsonFileName>
   <Type>1</Type>
   <Subprocess>0</Subprocess>
   <Category>5</Category>
@@ -21,7 +21,7 @@
   <IsCustomProcessingStepAllowedForOtherPublishers>1</IsCustomProcessingStepAllowedForOtherPublishers>
   <PrimaryEntity>none</PrimaryEntity>
   <LocalizedNames>
-    <LocalizedName languagecode="1033" description="HTTP - Start" />
+    <LocalizedName languagecode="1033" description="HTTP - Start Flow" />
   </LocalizedNames>
   <Descriptions>
     <Description languagecode="1033" description="Start een Flow op basis van de volgende configuratie:&#xA;{&#xA;    &quot;Config&quot;: {&#xA;        &quot;Flowname&quot;: &quot;&lt;Flowname&gt;&quot;,&#xA;        &quot;Username&quot;: &quot;&lt;Username&gt;&quot;,&#xA;        &quot;Endpoint&quot;: &quot;&lt;HTTP endpoint&gt;&quot;&#xA;    }&#xA;}" />
